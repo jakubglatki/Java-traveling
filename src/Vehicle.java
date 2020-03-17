@@ -43,4 +43,14 @@ public class Vehicle {
     public void setAverageSpeed(double averageSpeed) {
         this.averageSpeed = averageSpeed;
     }
+
+    public double calculateTravelTime (Route route)
+    {
+        double days;
+
+        days=(route.getDistance()/this.averageSpeed);
+
+        days=days/24;
+        return Math.ceil(days);
+    }
 }
