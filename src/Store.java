@@ -17,4 +17,12 @@ public class Store {
     public Location getLocation() {
         return location;
     }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "name='" + name + '\'' +
+                ", location=" + location.toString() +
+                '}';
+    }
 }

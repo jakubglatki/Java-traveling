@@ -12,6 +12,13 @@ public class Vehicle {
         this.averageSpeed=averageSpeed;
     }
 
+    public Vehicle(int registrationNumber, double volume, double maxWeight, double averageSpeed)
+    {
+        this(registrationNumber,averageSpeed);
+        this.volume=volume;
+        this.maxWeight=maxWeight;
+    }
+
     public int getRegistrationNumber() {
         return registrationNumber;
     }
@@ -52,5 +59,15 @@ public class Vehicle {
 
         days=days/24;
         return Math.ceil(days);
+    }
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "registrationNumber=" + registrationNumber +
+                ", volume=" + volume +
+                ", maxWeight=" + maxWeight +
+                ", averageSpeed=" + averageSpeed +
+                '}';
     }
 }

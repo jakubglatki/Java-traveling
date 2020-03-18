@@ -34,4 +34,13 @@ public class Route {
     public void setDistance(int distance) {
         this.distance = distance;
     }
+
+    @Override
+    public String toString() {
+        return "Route{" +
+                "store=" + store.toString() +
+                ", warehouse=" + warehouse.toString() +
+                ", distance=" + distance +
+                '}';
+    }
 }
