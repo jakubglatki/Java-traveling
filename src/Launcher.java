@@ -1,3 +1,10 @@
+/**
+ * Launcher class, for running everything of
+ *
+ * @author  Jakub Glatki
+ * @since   2020-03-18
+ */
+
 public class Launcher {
 
     public static void main(String args[]) {
@@ -9,7 +16,7 @@ public class Launcher {
         String Poland = "Poland";
         Location location2 = new Location(Katowice, Poland);
 
-        int registrationNumber = 313;
+        String registrationNumber = "313";
         double averageSpeed = 75;
         Vehicle vehicle = new Vehicle(registrationNumber, averageSpeed);
 
