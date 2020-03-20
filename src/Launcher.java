@@ -32,7 +32,7 @@ public class Launcher {
 
 
 
-        String wName = "Skladišče";
+        String wName = "Skladisce";
         int capacity = 19;
         Warehouse warehouse = new Warehouse(wName, location2, capacity);
 

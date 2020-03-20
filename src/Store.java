@@ -21,7 +21,7 @@ public class Store {
     /**
      * Store's class constructor with name and location fields
      * @param name Store's name
-     * @param warehouse Store's location
+     * @param location Store's location
      */
     public Store(String name, Location location)
     {
