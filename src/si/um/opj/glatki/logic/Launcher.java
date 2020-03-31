@@ -1,0 +1,113 @@
+package si.um.opj.glatki.logic;
+
+import si.um.opj.glatki.logic.facility.Location;
+import si.um.opj.glatki.logic.facility.Store;
+import si.um.opj.glatki.logic.facility.Warehouse;
+import si.um.opj.glatki.logic.transport.Route;
+import si.um.opj.glatki.logic.transport.Truck;
+import si.um.opj.glatki.logic.transport.Van;
+
+/**
+ * si.um.opj.glatki.logic.Launcher class, for running everything of
+ *
+ * @author  Jakub Glatki
+ * @since   2020-03-18
+ */
+
+public class Launcher {
+
+    public static void main(String args[]) {
+        String Maribor = "Maribor";
+        String Slovenia = "Slovenia";
+        Location location = new Location(Maribor, Slovenia);
+
+        String Katowice = "Katowice";
+        String Poland = "Poland";
+        Location location2 = new Location(Katowice, Poland);
+
+        String registrationNumber = "313";
+        double averageSpeed = 75;
+        double volume =38;
+        double maxWeight = 15;
+        int lenght =10;
+        int numberOfTrailers=4;
+        Truck truck = new Truck(registrationNumber, volume, maxWeight, averageSpeed, lenght,numberOfTrailers);
+
+        int length2=4;
+        Van van = new Van(lenght);
+
+
+        String name = "Tony Cetinski Fan Store";
+        Store store = new Store(name, location);
+
+
+        String label1 ="Chocolate";
+        java.time.LocalDate expirationDate1=java.time.LocalDate.of(2020, 04, 02);
+        double foodVolume =4;
+        double foodWeight= 0.5;
+        FoodItem foodItem1 =new FoodItem(label1, foodVolume, foodWeight, expirationDate1);
+
+        String label2 ="Waffle";
+        java.time.LocalDate expirationDate2=java.time.LocalDate.of(2020, 07, 02);
+        double foodVolume2 = 6;
+        double foodWeight2 = 0.3;
+        FoodItem foodItem2 =new FoodItem(label2, foodVolume2, foodWeight2, expirationDate2);
+
+
+
+        String wName = "Skladisce";
+        int capacity = 19;
+        Warehouse warehouse = new Warehouse(wName, location2, capacity);
+
+        int distance = 641;
+        Route route = new Route(store, warehouse, distance);
+
+        double routeTime = truck.calculateTravelTime(route);
+
+
+
+
+
+        System.out.print("Route's time: ");
+        System.out.println(routeTime);
+
+        //foodItem1 correctly isn't added as it expires too soon
+        warehouse.addItem(foodItem1);
+        warehouse.addItem(foodItem2);
+        System.out.println(warehouse.toString());
+        int numberOfItems =warehouse.returnTheNumberOfFoodItems();
+        System.out.print("Number of FoodItems in warehouse: ");
+        System.out.println(numberOfItems);
+        boolean existingItem = warehouse.foodItemExists(label2);
+        System.out.print("Does foodItem with label2 exist?: ");
+        System.out.println(existingItem);
+        warehouse.removeItem(foodItem2);
+        System.out.println(warehouse.toString());
+        existingItem=warehouse.foodItemExists(label2);
+        System.out.print("Does foodItem with label2 exist after using remove function?: ");
+        System.out.println(existingItem);
+
+        truck.loadFoodItem(foodItem1);
+        truck.loadFoodItem(foodItem2);
+        System.out.println(truck.toString());
+        double takenSpace =truck.getTakenSpace();
+        System.out.print("Percentege of taken space on truck: ");
+        System.out.println(takenSpace);
+        truck.unloadFoodItems();
+        System.out.print("Percentege of taken space on truck after unloading: ");
+        takenSpace =truck.getTakenSpace();
+        System.out.println(takenSpace);
+        double trucksMaxVolume= truck.getVehiclesMaxVolume();
+        System.out.print("Trucks max volume: ");
+        System.out.println(trucksMaxVolume);
+
+
+
+        System.out.println(foodItem1.toString());
+        System.out.println(location.toString());
+        System.out.println(store.toString());
+        System.out.println(route.toString());
+        System.out.println(van.toString());
+
+    }
+}
