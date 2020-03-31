@@ -38,13 +38,13 @@ public class FoodItem {
      * @param weight si.um.opj.glatki.logic.FoodItem's weight
      * @param expirationDate si.um.opj.glatki.logic.FoodItem's expirationDate
      */
-    public FoodItem(String label, double volume, double weight, java.time.LocalDate expirationDate)
+    public FoodItem(String label, double volume, double weight, java.time.LocalDate expirationDate, FoodItemType foodItemType)
     {
         this(label);
         this.volume=volume;
         this.weight=weight;
         this.expirationDate=expirationDate;
-
+        this.foodItemType=foodItemType;
     }
 
 
@@ -114,7 +114,14 @@ public class FoodItem {
         this.expirationDate = expirationDate;
     }
 
-    //Methods
+    public FoodItemType getFoodItemType() {
+        return foodItemType;
+    }
+
+    public void setFoodItemType(FoodItemType foodItemType) {
+        this.foodItemType = foodItemType;
+    }
+//Methods
 
     /**
      * si.um.opj.glatki.logic.FoodItem's getting information of all attributes in String

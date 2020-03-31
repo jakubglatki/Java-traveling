@@ -12,8 +12,18 @@ public class Van extends Vehicle {
     }
 
 
-    public Van(String registrationNumber, double volume, double maxWeight, double averageSpeed, int lenght) {
+    public Van(String registrationNumber, double volume, double maxWeight, double averageSpeed, int lenght, FoodItemType foodItemType) {
         super(registrationNumber, volume, maxWeight, averageSpeed, lenght);
+        this.foodItemType=foodItemType;
+    }
+
+    //Getters and setters
+    public FoodItemType getFoodItemType() {
+        return foodItemType;
+    }
+
+    public void setFoodItemType(FoodItemType foodItemType) {
+        this.foodItemType = foodItemType;
     }
 
     //Methods
