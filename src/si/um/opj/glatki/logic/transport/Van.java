@@ -34,6 +34,6 @@ public class Van extends Vehicle {
 
     @Override
     public String toString() {
-        return "Van:" + super.toString();
+        return "Van:" + super.toString() + " FoodItemType= " + this.foodItemType;
     }
 }

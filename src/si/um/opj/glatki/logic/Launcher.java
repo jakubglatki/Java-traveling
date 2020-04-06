@@ -45,13 +45,15 @@ public class Launcher {
         java.time.LocalDate expirationDate1=java.time.LocalDate.of(2020, 04, 02);
         double foodVolume =4;
         double foodWeight= 0.5;
-        FoodItem foodItem1 =new FoodItem(label1, foodVolume, foodWeight, expirationDate1);
+        FoodItemType foodItemType1 = FoodItemType.FRESH;
+        FoodItem foodItem1 =new FoodItem(label1, foodVolume, foodWeight, expirationDate1, foodItemType1);
 
         String label2 ="Waffle";
         java.time.LocalDate expirationDate2=java.time.LocalDate.of(2020, 07, 02);
         double foodVolume2 = 6;
         double foodWeight2 = 0.3;
-        FoodItem foodItem2 =new FoodItem(label2, foodVolume2, foodWeight2, expirationDate2);
+        FoodItemType foodItemType2 = FoodItemType.FROZEN;
+        FoodItem foodItem2 =new FoodItem(label2, foodVolume2, foodWeight2, expirationDate2, foodItemType2);
 
 
 

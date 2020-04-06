@@ -125,6 +125,7 @@ public class FoodItem {
 
     /**
      * si.um.opj.glatki.logic.FoodItem's getting information of all attributes in String
+     *
      * @return information of all attributes in String
      * @since 2020-03-18
      */
@@ -134,7 +135,8 @@ public class FoodItem {
                 "label='" + label + '\'' +
                 ", volume=" + volume +
                 ", weight=" + weight +
-                ", expirationDate='" + expirationDate + '\'' +
+                ", expirationDate=" + expirationDate +
+                ", foodItemType=" + foodItemType +
                 '}';
     }
 }

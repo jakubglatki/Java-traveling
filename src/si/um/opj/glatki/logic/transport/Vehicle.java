@@ -80,6 +80,7 @@ public abstract class Vehicle {
         return volume;
     }
 
+    protected abstract double getVehiclesMaxVolume();
     /**
      * si.um.opj.glatki.logic.transport.Vehicle's volume setter
      * @param volume si.um.opj.glatki.logic.transport.Vehicle's volume
@@ -174,15 +175,14 @@ public abstract class Vehicle {
         {
             if (cargo[i]!=null)
             {
-                takenSpace ++;
+                takenSpace += cargo[i].getVolume();
             }
         }
-        double length=(double)cargo.length;
-        double percentageTaken = (takenSpace / length) * 100;
+
+        double percentageTaken = (takenSpace / this.getVehiclesMaxVolume()) * 100;
         return percentageTaken;
     }
 
-    public abstract double getVehiclesMaxVolume();
 
     /**
      * si.um.opj.glatki.logic.transport.Vehicle's getting information of all attributes in String
