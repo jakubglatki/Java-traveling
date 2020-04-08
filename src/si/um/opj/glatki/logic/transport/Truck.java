@@ -6,15 +6,21 @@ public class Truck extends Vehicle {
 
     //Constructors
 
-    public Truck(int length, int numberOfTrailers)
+    public Truck(int length, int numberOfTrailers) throws java.lang.IllegalArgumentException
     {
         super(length);
+        if(numberOfTrailers<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.numberOfTrailers=numberOfTrailers;
     }
 
-    public Truck(String registrationNumber, double volume, double maxWeight, double averageSpeed, int lenght, int numberOfTrailers)
+    public Truck(String registrationNumber, double volume, double maxWeight, double averageSpeed, int lenght, int numberOfTrailers) throws java.lang.IllegalArgumentException
     {
         super(registrationNumber,volume,maxWeight,averageSpeed,lenght);
+        if(numberOfTrailers<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.numberOfTrailers=numberOfTrailers;
     }
 
@@ -26,7 +32,10 @@ public class Truck extends Vehicle {
         return numberOfTrailers;
     }
 
-    public void setNumberOfTrailers(int numberOfTrailers) {
+    public void setNumberOfTrailers(int numberOfTrailers) throws java.lang.IllegalArgumentException {
+        if(numberOfTrailers<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.numberOfTrailers = numberOfTrailers;
     }
 

@@ -38,12 +38,22 @@ public class FoodItem {
      * @param weight si.um.opj.glatki.logic.FoodItem's weight
      * @param expirationDate si.um.opj.glatki.logic.FoodItem's expirationDate
      */
-    public FoodItem(String label, double volume, double weight, java.time.LocalDate expirationDate, FoodItemType foodItemType)
+    public FoodItem(String label, double volume, double weight, java.time.LocalDate expirationDate, FoodItemType foodItemType) throws java.lang.IllegalArgumentException
     {
         this(label);
+
+        if(volume<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.volume=volume;
+
+        if(weight<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.weight=weight;
+
         this.expirationDate=expirationDate;
+
         this.foodItemType=foodItemType;
     }
 
@@ -78,7 +88,10 @@ public class FoodItem {
      * si.um.opj.glatki.logic.FoodItem's volume setter
      * @param volume si.um.opj.glatki.logic.FoodItem's volume
      */
-    public void setVolume(double volume) {
+    public void setVolume(double volume) throws java.lang.IllegalArgumentException {
+        if(volume<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.volume = volume;
     }
 
@@ -94,7 +107,10 @@ public class FoodItem {
      * si.um.opj.glatki.logic.FoodItem's weight setter
      * @param weight si.um.opj.glatki.logic.FoodItem's weight
      */
-    public void setWeight(double weight) {
+    public void setWeight(double weight) throws java.lang.IllegalArgumentException {
+        if(weight<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.weight = weight;
     }
 

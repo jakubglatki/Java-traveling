@@ -1,5 +1,8 @@
 package si.um.opj.glatki.logic.facility;
 
+import si.um.opj.glatki.logic.transport.Transportable;
+import si.um.opj.glatki.logic.transport.Vehicle;
+
 /**
  * Represenation of store
  *
@@ -8,7 +11,7 @@ package si.um.opj.glatki.logic.facility;
  */
 
 
-public class Store extends BusinessFacility {
+public class Store extends BusinessFacility implements Transportable {
 
 
     //Constructors
@@ -42,5 +45,10 @@ public class Store extends BusinessFacility {
     public String toString() {
         return "Store{ " +
               super.toString();
+    }
+
+    @Override
+    public void acceptVehicle(Vehicle vehicle) {
+        vehicle.unloadFoodItems();
     }
 }

@@ -1,5 +1,8 @@
 package si.um.opj.glatki.logic;
 
+import si.um.opj.glatki.logic.exceptions.CapacityExceededException;
+import si.um.opj.glatki.logic.exceptions.FoodItemTypeException;
+import si.um.opj.glatki.logic.exceptions.VolumeExceededException;
 import si.um.opj.glatki.logic.facility.Location;
 import si.um.opj.glatki.logic.facility.Store;
 import si.um.opj.glatki.logic.facility.Warehouse;
@@ -16,7 +19,7 @@ import si.um.opj.glatki.logic.transport.Van;
 
 public class Launcher {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws FoodItemTypeException, CapacityExceededException, VolumeExceededException {
         String Maribor = "Maribor";
         String Slovenia = "Slovenia";
         Location location = new Location(Maribor, Slovenia);
@@ -31,10 +34,14 @@ public class Launcher {
         double maxWeight = 15;
         int lenght =10;
         int numberOfTrailers=4;
-        Truck truck = new Truck(registrationNumber, volume, maxWeight, averageSpeed, lenght,numberOfTrailers);
+        Truck truck = new Truck(registrationNumber, volume, maxWeight, averageSpeed, lenght, numberOfTrailers);
 
-        int length2=4;
-        Van van = new Van(lenght);
+        String registrationNumber2 = "312";
+        double averageSpeed2 = 75;
+        double volume2 =5;
+        double maxWeight2 = 15;
+        int lenght2 =40;
+        Van van = new Van(registrationNumber2,volume2,maxWeight2,averageSpeed2,lenght2,FoodItemType.FRESH);
 
 
         String name = "Tony Cetinski Fan Store";
@@ -67,6 +74,21 @@ public class Launcher {
         double routeTime = truck.calculateTravelTime(route);
 
 
+        try {
+            warehouse.acceptVehicle(truck);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+
+        try {
+            warehouse.acceptVehicle(van);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
 
 
@@ -83,11 +105,25 @@ public class Launcher {
         boolean existingItem = warehouse.foodItemExists(label2);
         System.out.print("Does foodItem with label2 exist?: ");
         System.out.println(existingItem);
+
+
+        try {
+            warehouse.acceptVehicle(van);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        store.acceptVehicle(van);
+
         warehouse.removeItem(foodItem2);
         System.out.println(warehouse.toString());
         existingItem=warehouse.foodItemExists(label2);
         System.out.print("Does foodItem with label2 exist after using remove function?: ");
         System.out.println(existingItem);
+
+
 
         truck.loadFoodItem(foodItem1);
         truck.loadFoodItem(foodItem2);

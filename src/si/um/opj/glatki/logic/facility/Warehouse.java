@@ -1,6 +1,13 @@
 package si.um.opj.glatki.logic.facility;
 
 import si.um.opj.glatki.logic.FoodItem;
+import si.um.opj.glatki.logic.exceptions.CapacityExceededException;
+import si.um.opj.glatki.logic.exceptions.FoodItemTypeException;
+import si.um.opj.glatki.logic.exceptions.VolumeExceededException;
+import si.um.opj.glatki.logic.transport.Transportable;
+import si.um.opj.glatki.logic.transport.Truck;
+import si.um.opj.glatki.logic.transport.Van;
+import si.um.opj.glatki.logic.transport.Vehicle;
 
 /**
  * Represenation of warehouse
@@ -8,7 +15,7 @@ import si.um.opj.glatki.logic.FoodItem;
  * @author  Jakub Glatki
  * @since   2020-03-18
  */
-public class Warehouse extends BusinessFacility{
+public class Warehouse extends BusinessFacility implements Transportable {
 
     private FoodItem[] foodItems;
 
@@ -30,9 +37,12 @@ public class Warehouse extends BusinessFacility{
      * @param location si.um.opj.glatki.logic.facility.Warehouse's location
      * @param capacity Size of maximum number of FoodItems in the warehouse
      */
-    public Warehouse(String name, Location location, int capacity)
+    public Warehouse(String name, Location location, int capacity) throws java.lang.IllegalArgumentException
     {
         super(name, location);
+        if(capacity<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.foodItems = new FoodItem[capacity];
     }
 
@@ -144,6 +154,19 @@ public class Warehouse extends BusinessFacility{
         else return false;
     }
 
+    private double getVolumeOfFoodItemsInWarehouse()
+    {
+        double takenSpace=0;
+        for (int i = 0; i < foodItems.length; i++)
+        {
+            if (foodItems[i]!=null)
+            {
+                takenSpace += foodItems[i].getVolume();
+            }
+        }
+        return takenSpace;
+    }
+
     /**
      * si.um.opj.glatki.logic.facility.Warehouse's getting information of all attributes in String
      * @return information of all attributes in String
@@ -164,4 +187,67 @@ public class Warehouse extends BusinessFacility{
         return returnString;
     }
 
+    @Override
+    public void acceptVehicle(Vehicle vehicle) throws CapacityExceededException, VolumeExceededException, FoodItemTypeException {
+        if(vehicle instanceof Truck) {
+
+            acceptTruck(vehicle);
+        }
+        else if (vehicle instanceof Van)
+        {
+            acceptVan(vehicle);
+        }
+    }
+
+    private void acceptTruck(Vehicle vehicle)  throws CapacityExceededException, VolumeExceededException
+    {
+
+        double vehiclesVolumeLeft=(((Truck) vehicle).getVehiclesMaxVolume()-vehicle.getVolumeOfItemsOfVehicle());
+
+        //we are getting all capacity of the vehicle and than we substract it by number of items that were loaded before vehicle went to the warehouse
+        if((vehicle.getCargo().length-vehicle.getNumberOfLoadedItems())>this.foodItems.length)
+        {
+            vehicle.unloadFoodItems();
+            throw new CapacityExceededException();
+        }
+
+        else if(vehiclesVolumeLeft<this.getVolumeOfFoodItemsInWarehouse())
+        {
+            vehicle.unloadFoodItems();
+            throw new VolumeExceededException();
+        }
+
+        else {
+            vehicle.loadFoodItem(this.foodItems);
+            for(int i=0;i<this.foodItems.length;i++) {
+                this.foodItems[i]=null;
+            }
+        }
+    }
+
+    private void acceptVan(Vehicle vehicle) throws CapacityExceededException, VolumeExceededException, FoodItemTypeException {
+        for(int i=0;i<this.foodItems.length;i++)
+        {
+            if(this.foodItems[i]!=null) {
+                if (((Van) vehicle).getFoodItemType() != this.foodItems[i].getFoodItemType()) {
+                    throw new FoodItemTypeException();
+                }
+            }
+            //we are checking in each iteration of the loop the new number of left volume
+            double vehiclesVolumeLeft=(((Van) vehicle).getVehiclesMaxVolume()-vehicle.getVolumeOfItemsOfVehicle());
+            if(i>(vehicle.getCargo().length-vehicle.getNumberOfLoadedItems()))
+            {
+                throw new CapacityExceededException();
+            }
+            else if(vehiclesVolumeLeft<this.getVolumeOfFoodItemsInWarehouse())
+            {
+                throw new VolumeExceededException();
+            }
+            else
+            {
+                vehicle.loadFoodItem(this.foodItems[i]);
+                this.foodItems[i]=null;
+            }
+        }
+    }
 }

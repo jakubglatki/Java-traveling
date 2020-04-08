@@ -1,6 +1,7 @@
 package si.um.opj.glatki.logic.transport;
 
 import si.um.opj.glatki.logic.FoodItem;
+import si.um.opj.glatki.logic.exceptions.CapacityExceededException;
 
 /**
  * Represenation of si.um.opj.glatki.logic.transport.Vehicle
@@ -22,8 +23,11 @@ public abstract class Vehicle {
      *  si.um.opj.glatki.logic.transport.Vehicle's class constructor with lenght field
      * @param lenght length of cargo array
      */
-    public Vehicle(int lenght)
+    public Vehicle(int lenght) throws java.lang.IllegalArgumentException
     {
+        if(lenght<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.cargo= new FoodItem[lenght];
     };
 
@@ -32,10 +36,14 @@ public abstract class Vehicle {
      * @param registrationNumber si.um.opj.glatki.logic.transport.Vehicle's registration number
      * @param averageSpeed si.um.opj.glatki.logic.transport.Vehicle's average speed
      */
-    public Vehicle(String registrationNumber, double averageSpeed, int lenght)
+    public Vehicle(String registrationNumber, double averageSpeed, int lenght) throws java.lang.IllegalArgumentException
     {
         this(lenght);
         this.registrationNumber=registrationNumber;
+        if (averageSpeed<0)
+        {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.averageSpeed=averageSpeed;
     }
 
@@ -47,10 +55,17 @@ public abstract class Vehicle {
      * @param averageSpeed si.um.opj.glatki.logic.transport.Vehicle's average speed
      * @param lenght si.um.opj.glatki.logic.transport.Vehicle's cargo array length
      */
-    public Vehicle(String registrationNumber, double volume, double maxWeight, double averageSpeed, int lenght)
+    public Vehicle(String registrationNumber, double volume, double maxWeight, double averageSpeed, int lenght) throws java.lang.IllegalArgumentException
     {
         this(registrationNumber,averageSpeed,lenght);
+        if (volume<0)
+        {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.volume=volume;
+        if(maxWeight<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.maxWeight=maxWeight;
     }
 
@@ -85,7 +100,10 @@ public abstract class Vehicle {
      * si.um.opj.glatki.logic.transport.Vehicle's volume setter
      * @param volume si.um.opj.glatki.logic.transport.Vehicle's volume
      */
-    public void setVolume(double volume) {
+    public void setVolume(double volume) throws java.lang.IllegalArgumentException {
+        if(volume<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.volume = volume;
     }
 
@@ -101,7 +119,10 @@ public abstract class Vehicle {
      * si.um.opj.glatki.logic.transport.Vehicle's volume setter
      * @param maxWeight si.um.opj.glatki.logic.transport.Vehicle's maxWeight
      */
-    public void setMaxWeight(double maxWeight) {
+    public void setMaxWeight(double maxWeight) throws java.lang.IllegalArgumentException {
+        if(maxWeight<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.maxWeight = maxWeight;
     }
 
@@ -117,11 +138,21 @@ public abstract class Vehicle {
      * si.um.opj.glatki.logic.transport.Vehicle's averageSpeed setter
      * @param averageSpeed si.um.opj.glatki.logic.transport.Vehicle's averageSpeed
      */
-    public void setAverageSpeed(double averageSpeed) {
+    public void setAverageSpeed(double averageSpeed) throws java.lang.IllegalArgumentException {
+        if(averageSpeed<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.averageSpeed = averageSpeed;
     }
 
-    //Methods
+    public FoodItem[] getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(FoodItem[] cargo) {
+        this.cargo = cargo;
+    }
+//Methods
 
     /**
      * si.um.opj.glatki.logic.transport.Vehicle's calculating travel time on given route
@@ -156,6 +187,13 @@ public abstract class Vehicle {
         }
     }
 
+    public void loadFoodItem(FoodItem[] foodItems)
+    {
+        for (int i = 0; i < cargo.length; i++)
+        {
+            this.loadFoodItem(foodItems[i]);
+        }
+    }
     /**
      * si.um.opj.glatki.logic.transport.Vehicle's unloading cargo array
      * @since 2020-03-31
@@ -183,6 +221,31 @@ public abstract class Vehicle {
         return percentageTaken;
     }
 
+    public double getVolumeOfItemsOfVehicle()
+    {
+        double takenSpace=0;
+        for (int i = 0; i < cargo.length; i++)
+        {
+            if (cargo[i]!=null)
+            {
+                takenSpace += cargo[i].getVolume();
+            }
+        }
+        return takenSpace;
+    }
+
+    public int getNumberOfLoadedItems()
+    {
+        int numberOfLoadedItems=0;
+        for(int i=0;i<cargo.length;i++)
+        {
+            if(cargo[i]!=null)
+            {
+                numberOfLoadedItems++;
+            }
+        }
+        return numberOfLoadedItems;
+    }
 
     /**
      * si.um.opj.glatki.logic.transport.Vehicle's getting information of all attributes in String

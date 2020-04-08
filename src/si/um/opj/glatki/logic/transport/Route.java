@@ -28,10 +28,13 @@ public class Route {
      * @param warehouse si.um.opj.glatki.logic.transport.Route's warehouse
      * @param distance si.um.opj.glatki.logic.transport.Route's distance
      */
-    public Route(Store store, Warehouse warehouse, int distance)
+    public Route(Store store, Warehouse warehouse, int distance) throws java.lang.IllegalArgumentException
     {
         this.store=store;
         this.warehouse=warehouse;
+        if(distance<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.distance=distance;
     }
 
@@ -82,7 +85,10 @@ public class Route {
      * si.um.opj.glatki.logic.transport.Route's distance setter
      * @param distance si.um.opj.glatki.logic.transport.Route's distance
      */
-    public void setDistance(int distance) {
+    public void setDistance(int distance) throws java.lang.IllegalArgumentException {
+        if(distance<0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         this.distance = distance;
     }
 
