@@ -31,13 +31,12 @@ public class GUI {
     private JPanel fiEdit;
     private JPanel fiDelete;
     private JRadioButton warehouseRadioButton;
-    private JTextField textField3;
+    private JTextField bfCapacityTextField;
     private JRadioButton storeRadioButton;
     private JTextField textField1;
     private JButton bfBCreate;
     private JLabel bfLName;
-    private JPanel bfLoad;
-    private JPanel bfUnload;
+    private JPanel bfAdd;
     private JRadioButton truckRadioButton;
     private JTextField textField4;
     private JTextField textField5;
@@ -67,6 +66,33 @@ public class GUI {
     private JButton vBDelete;
     private JList fiListDelete;
     private JButton fiBDelete;
+    private JButton fiBEdit;
+    private JList fiListEdit;
+    private JList vTruckEditList;
+    private JList vVanEditList;
+    private JLabel vTruckEditListText;
+    private JLabel vVanEditListText;
+    private JRadioButton vTruckRadioButtonEdit;
+    private JRadioButton vVanRadioButtonEdit;
+    private JList bfWarehouseEditList;
+    private JList bfStoreEditList;
+    private JLabel bfWarehouseEditListText;
+    private JLabel bfStoreEditListText;
+    private JRadioButton bfWarehouseRadioButtonEdit;
+    private JRadioButton bfStoreRadioButtonEdit;
+    private JLabel bfCapacityEditLabel;
+    private JTextField bfCapacityEditTextField;
+    private JButton bfBEdit;
+    private JLabel bfCapacityLabel;
+    private JButton bfBAdd;
+    private JLabel vNumberOfTrailersEditLabel;
+    private JTextField vNumberOfTrailersEditTextLabel;
+    private JLabel vFoodItemTypeEditText;
+    private JRadioButton vFreshRadioButtonEdit;
+    private JRadioButton vFrozenRadioButtonEdit;
+    private JButton vBLoad;
+    private JRadioButton fiFreshRadioButtonEdit;
+    private JRadioButton fiFrozenRadioButtonEdit;
 
 
     private void setButtonsVisibility(){
@@ -85,8 +111,37 @@ public class GUI {
             this.numberOfTrailersLabel.setVisible(!visibility);
         }
 
+        private void setVehicleRadioButtonsVisibilityEdit(boolean visibility)
+        {
+
+            this.vFreshRadioButtonEdit.setVisible(visibility);
+            this.vFrozenRadioButtonEdit.setVisible(visibility);
+            this.vNumberOfTrailersEditLabel.setVisible(!visibility);
+            this.vNumberOfTrailersEditTextLabel.setVisible(!visibility);
+            this.vVanEditList.setVisible(visibility);
+            this.vTruckEditList.setVisible(!visibility);
+            this.vVanEditListText.setVisible(visibility);
+            this.vTruckEditListText.setVisible(!visibility);
+            this.vFoodItemTypeEditText.setVisible(visibility);
+        }
+
+        private void setpBusinessFacilitiesRadioButtonVisibility(boolean visibility)
+        {
+            this.bfStoreEditList.setVisible(visibility);
+            this.bfStoreEditListText.setVisible(visibility);
+            this.bfWarehouseEditList.setVisible(!visibility);
+            this.bfWarehouseEditListText.setVisible(!visibility);
+            this.bfCapacityEditLabel.setVisible(!visibility);
+            this.bfCapacityEditTextField.setVisible(!visibility);
+            this.bfCapacityLabel.setVisible(!visibility);
+            this.bfCapacityTextField.setVisible(!visibility);
+
+        }
+
     public GUI() {
         setVehicleRadioButtonsVisibility(false);
+        setVehicleRadioButtonsVisibilityEdit(false);
+        setpBusinessFacilitiesRadioButtonVisibility(true);
         bBusinessFacilities.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -112,14 +167,32 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 storeRadioButton.setSelected(false);
+                setpBusinessFacilitiesRadioButtonVisibility(false);
             }
         });
         storeRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 warehouseRadioButton.setSelected(false);
+                setpBusinessFacilitiesRadioButtonVisibility(true);
             }
         });
+
+        bfWarehouseRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                bfStoreRadioButtonEdit.setSelected(false);
+                setpBusinessFacilitiesRadioButtonVisibility(false);
+            }
+        });
+        bfStoreRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                bfWarehouseRadioButtonEdit.setSelected(false);
+                setpBusinessFacilitiesRadioButtonVisibility(true);
+            }
+        });
+
         truckRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -134,6 +207,35 @@ public class GUI {
                 setVehicleRadioButtonsVisibility(true);
             }
         });
+
+        vTruckRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                vVanRadioButtonEdit.setSelected(false);
+                setVehicleRadioButtonsVisibilityEdit(false);
+            }
+        });
+        vVanRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                vTruckRadioButtonEdit.setSelected(false);
+                setVehicleRadioButtonsVisibilityEdit(true);
+            }
+        });
+        vFreshRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                vFrozenRadioButtonEdit.setSelected(false);
+            }
+        });
+        vFrozenRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                vFreshRadioButtonEdit.setSelected(false);
+            }
+        });
+
+
         freshRadioButtonVehicle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -156,6 +258,20 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 freshRadioButton.setSelected(false);
+            }
+        });
+
+
+        fiFreshRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                fiFrozenRadioButtonEdit.setSelected(false);
+            }
+        });
+        fiFrozenRadioButtonEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                fiFreshRadioButtonEdit.setSelected(false);
             }
         });
     }
