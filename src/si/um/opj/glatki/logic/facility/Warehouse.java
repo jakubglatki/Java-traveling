@@ -103,6 +103,14 @@ public class Warehouse extends BusinessFacility implements Transportable {
         }
     }
 
+
+    public void removeAllItems()
+    {
+        for (int i = 0; i < foodItems.length; i++)
+        {
+                foodItems[i] = null;
+        }
+    }
     /**
      * si.um.opj.glatki.logic.facility.Warehouse's counting items in foodItems array
      * @return number of objects of FoodItems class in foodItems array
@@ -167,6 +175,18 @@ public class Warehouse extends BusinessFacility implements Transportable {
         return takenSpace;
     }
 
+    private int getNumberOfFoodItemsInWarehouse()
+    {
+        int numberOfItems=0;
+        for (int i = 0; i < foodItems.length; i++)
+        {
+            if (foodItems[i]!=null)
+            {
+                numberOfItems ++;
+            }
+        }
+        return numberOfItems;
+    }
     /**
      * si.um.opj.glatki.logic.facility.Warehouse's getting information of all attributes in String
      * @return information of all attributes in String
@@ -205,7 +225,7 @@ public class Warehouse extends BusinessFacility implements Transportable {
         double vehiclesVolumeLeft=(((Truck) vehicle).getVehiclesMaxVolume()-vehicle.getVolumeOfItemsOfVehicle());
 
         //we are getting all capacity of the vehicle and than we substract it by number of items that were loaded before vehicle went to the warehouse
-        if((vehicle.getCargo().length-vehicle.getNumberOfLoadedItems())>this.foodItems.length)
+        if((vehicle.getCargo().length-vehicle.getNumberOfLoadedItems())<this.getNumberOfFoodItemsInWarehouse())
         {
             vehicle.unloadFoodItems();
             throw new CapacityExceededException();
@@ -235,7 +255,8 @@ public class Warehouse extends BusinessFacility implements Transportable {
             }
             //we are checking in each iteration of the loop the new number of left volume
             double vehiclesVolumeLeft=(((Van) vehicle).getVehiclesMaxVolume()-vehicle.getVolumeOfItemsOfVehicle());
-            if(i>(vehicle.getCargo().length-vehicle.getNumberOfLoadedItems()))
+
+            if(1>(vehicle.getCargo().length-vehicle.getNumberOfLoadedItems()))
             {
                 throw new CapacityExceededException();
             }

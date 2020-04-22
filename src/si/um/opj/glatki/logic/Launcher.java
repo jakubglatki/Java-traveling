@@ -74,12 +74,15 @@ public class Launcher {
         double routeTime = truck.calculateTravelTime(route);
 
 
+
+        warehouse.addItem(foodItem2);
+        //no exceptions
         try {
             warehouse.acceptVehicle(truck);
         }
         catch (Exception e)
         {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         try {
@@ -107,6 +110,7 @@ public class Launcher {
         System.out.println(existingItem);
 
 
+        //FoodItemTypeException
         try {
             warehouse.acceptVehicle(van);
         }
@@ -138,6 +142,41 @@ public class Launcher {
         double trucksMaxVolume= truck.getVehiclesMaxVolume();
         System.out.print("Trucks max volume: ");
         System.out.println(trucksMaxVolume);
+
+
+
+
+        //CapacityExceededException
+        int lenght3 =1;
+        Truck truck3 = new Truck(registrationNumber, volume, maxWeight, averageSpeed, lenght3, numberOfTrailers);
+        warehouse.addItem(foodItem2);
+        warehouse.addItem(foodItem2);
+        warehouse.addItem(foodItem2);
+        try {
+            warehouse.acceptVehicle(truck3);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        warehouse.removeAllItems();
+
+
+        //VolumeExceededException
+        double volume4 =1;
+        int numberOfTrailers4=18;
+        warehouse.addItem(foodItem2);
+        warehouse.addItem(foodItem2);
+        warehouse.addItem(foodItem2);
+        Truck truck4 = new Truck(registrationNumber, volume4, maxWeight, averageSpeed, lenght, numberOfTrailers4);
+        try {
+            warehouse.acceptVehicle(truck4);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        warehouse.removeAllItems();
 
 
 
