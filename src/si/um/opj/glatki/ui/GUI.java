@@ -1,16 +1,23 @@
 package si.um.opj.glatki.ui;
 
 import si.um.opj.glatki.logic.FoodItem;
+import si.um.opj.glatki.logic.FoodItemType;
+import si.um.opj.glatki.logic.exceptions.CapacityExceededException;
+import si.um.opj.glatki.logic.exceptions.FoodItemTypeException;
+import si.um.opj.glatki.logic.exceptions.VolumeExceededException;
 import si.um.opj.glatki.logic.facility.Location;
 import si.um.opj.glatki.logic.facility.Store;
 import si.um.opj.glatki.logic.facility.Warehouse;
 import si.um.opj.glatki.logic.transport.Truck;
 import si.um.opj.glatki.logic.transport.Van;
+import si.um.opj.glatki.logic.transport.Vehicle;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class GUI {
@@ -55,10 +62,10 @@ public class GUI {
     private JTextField vCNOTText;
     private JRadioButton vanRadioButton;
     private JTextField bfCName;
-    private JTextField textField10;
-    private JTextField textField11;
-    private JTextField textField12;
-    private JTextField textField13;
+    private JTextField fiCLabelText;
+    private JTextField fiCVolumeText;
+    private JTextField fiCWeightText;
+    private JTextField fiCExpirationDateText;
     private JRadioButton freshRadioButton;
     private JRadioButton frozenRadioButton;
     private JButton fiBCreate;
@@ -118,19 +125,23 @@ public class GUI {
     private JTextField vEVolumeText;
     private JTextField vEMaxWeightText;
     private JTextField vEAvgSpeedText;
-    private JTextField vELengthText;
     private JList<FoodItem> vLFoodItemList;
     private JList<Truck> vLTruckList;
     private JList<Van> vLVanList;
     private JList<Truck> vUTruckList;
     private JList<Van> vUVanList;
     private JList<Warehouse> vUWarehouseList;
-    private JList<Store> vUStoreList;
     private JList<Truck> vCTruckList;
     private JList<Van> vCVanList;
     private JLabel vCTruckText;
     private JLabel vCVanText;
     private JList<FoodItem> fiCFoodItemList;
+    private JButton vEButton;
+    private JButton vBUnload;
+    private JTextField fiELabelText;
+    private JTextField fiEVolumeText;
+    private JTextField fiEWeightText;
+    private JTextField fiEExperationDateText;
 
     //Lists of business facilities, vehicles, and food items
     public ArrayList<Warehouse> warehouseArrayList= new ArrayList<Warehouse>();
@@ -220,13 +231,12 @@ public class GUI {
 
             vLFoodItemList.setModel(foodItemModel);
 
-            vUWarehouseList.setModel(warehouseModel);
-            vUStoreList.setModel(storeModel);
-
             fiCFoodItemList.setModel(foodItemModel);
             fiEFoodItemList.setModel(foodItemModel);
             fiDFoodItemList.setModel(foodItemModel);
         }
+
+
 
     public GUI() {
         setVehicleRadioButtonsVisibility(false);
@@ -369,10 +379,66 @@ public class GUI {
         });
 
 
-        bfBCreate.addActionListener(new BusinessFacilityAdd());
+        bfBCreate.addActionListener(new BusinessFacilityCreate());
         bfBEdit.addActionListener(new BusinessFacilityEdit());
-        bfBDelete.addActionListener(new BusinessFacilityRemove());
+        bfBDelete.addActionListener(new BusinessFacilityDelete(warehouseArrayList, bfDWarehouseList, storeArrayList, bfDStoreList));
         bfBAdd.addActionListener(new BusinessFacilityAddFoodItem());
+
+        vBCreate.addActionListener(new VehicleCreate());
+        vEButton.addActionListener(new VehicleEdit());
+        vBDelete.addActionListener(new VehicleDelete(vanArrayList, vDVanList, truckArrayList, vDTruckList));
+        vBLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(vLFoodItemList.getSelectedIndex()>=0) {
+                    int fiIndex = vLFoodItemList.getSelectedIndex();
+
+                    FoodItem foodItem = foodItemArrayList.get(fiIndex);
+
+                    if(vLVanList.getSelectedIndex()>=0)
+                    {
+                        int vIndex = vLVanList.getSelectedIndex();
+                        Van van = vanArrayList.get(vIndex);
+                        van.loadFoodItem(foodItem);
+                    }
+
+                    else if(vLTruckList.getSelectedIndex()>=0)
+                    {
+                        int tIndex = vLTruckList.getSelectedIndex();
+                        Truck truck = truckArrayList.get(tIndex);
+                        truck.loadFoodItem(foodItem);
+                    }
+                }
+
+            }
+        });
+        vBUnload.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                    if(vUVanList.getSelectedIndex()>=0)
+                    {
+                        int vIndex = vUVanList.getSelectedIndex();
+                        Van van = vanArrayList.get(vIndex);
+                       van.unloadFoodItems();
+                    }
+
+                    else if(vUTruckList.getSelectedIndex()>=0) {
+                        int tIndex = vUTruckList.getSelectedIndex();
+                        Truck truck = truckArrayList.get(tIndex);
+                        truck.unloadFoodItems();
+                    }
+
+
+            }
+        });
+
+        fiBCreate.addActionListener(new FoodItemCreate());
+        fiBEdit.addActionListener(new FoodItemEdit());
+        fiBDelete.addActionListener(new FoodItemDelete(foodItemArrayList, fiDFoodItemList));
+
+
+
     }
 
 
@@ -394,7 +460,7 @@ public class GUI {
     }
 
 
-    private class BusinessFacilityAdd implements ActionListener{
+    private class BusinessFacilityCreate implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -455,35 +521,159 @@ public class GUI {
         }
     }
 
-    private class BusinessFacilityRemove implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
 
-                if(bfDWarehouseList.getSelectedIndex()>=0) {
-                    warehouseModel.remove(bfDWarehouseList.getSelectedIndex());
-                    warehouseArrayList.remove(bfDWarehouseList.getSelectedIndex());
-                }
-
-                if(bfDStoreList.getSelectedIndex()>=0) {
-                    storeArrayList.remove(bfDStoreList.getSelectedIndex());
-                    storeModel.remove(bfDStoreList.getSelectedIndex());
-                }
-
-        }
-    }
 
 
     private class BusinessFacilityAddFoodItem implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            int wIndex=bfAWarehouseList.getSelectedIndex();
-            int fiIndex=bfAFoodItemList.getSelectedIndex();
+            if(bfAWarehouseList.getSelectedIndex()>=0 && bfAFoodItemList.getSelectedIndex()>=0) {
+                int wIndex = bfAWarehouseList.getSelectedIndex();
+                int fiIndex = bfAFoodItemList.getSelectedIndex();
 
-            Warehouse warehouse = warehouseArrayList.get(wIndex);
-            FoodItem foodItem = foodItemArrayList.get(fiIndex);
+                Warehouse warehouse = warehouseArrayList.get(wIndex);
+                FoodItem foodItem = foodItemArrayList.get(fiIndex);
 
-            warehouse.addItem(foodItem);
+                warehouse.addItem(foodItem);
+            }
+        }
+    }
+
+    private class VehicleCreate implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+
+            String regNum  = vCRegistrationText.getText();
+            double volume = Double.parseDouble(vCVolumeText.getText());
+            double maxWeight = Double.parseDouble(vCMaxWeightText.getText());
+            double avgSpeed = Double.parseDouble(vCAvgSpeedText.getText());
+            int length = Integer.parseInt(vCLengthText.getText());
+
+            if(truckRadioButton.isSelected())
+            {
+
+                 int numbOfTrailers = Integer.parseInt(vCNOTText.getText());
+                 Truck truck = new Truck (regNum, volume, maxWeight, avgSpeed, length, numbOfTrailers);
+
+                truckModel.addElement(truck);
+                truckArrayList.add(truck);
+             }
+
+
+            else if(vanRadioButton.isSelected())
+            {
+                FoodItemType foodItemType = null;
+                if(freshRadioButtonVehicle.isSelected())
+                {
+                     foodItemType = FoodItemType.FRESH;
+                }
+                else if(frozenRadioButtonVehicle.isSelected())
+                {
+                     foodItemType = FoodItemType.FROZEN;
+                }
+                Van van= new Van(regNum, volume, maxWeight, avgSpeed, length, foodItemType);
+                vanModel.addElement(van);
+                vanArrayList.add(van);
+            }
+        }
+    }
+
+    private class VehicleEdit implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            String regNum = vERegNumberText.getText();
+            double volume = Double.parseDouble(vEVolumeText.getText());
+            double maxWeight = Double.parseDouble(vEMaxWeightText.getText());
+            double avgSpeed = Double.parseDouble(vEAvgSpeedText.getText());
+
+            if (vTruckRadioButtonEdit.isSelected()) {
+
+
+                if(vETruckList.getSelectedIndex()>=0)
+                {
+                int numbOfTrailers = Integer.parseInt(vENOTText.getText());
+                int index = vETruckList.getSelectedIndex();
+                Truck truck=truckArrayList.get(index);
+
+                truck.setRegistrationNumber(regNum);
+                truck.setVolume(volume);
+                truck.setMaxWeight(maxWeight);
+                truck.setAverageSpeed(avgSpeed);
+                truck.setNumberOfTrailers(numbOfTrailers);
+            }
+        }
+            else if(vVanRadioButtonEdit.isSelected())
+            {
+                if(vEVanList.getSelectedIndex()>=0) {
+                    FoodItemType foodItemType = null;
+                    if (freshRadioButtonVehicle.isSelected()) {
+                        foodItemType = FoodItemType.FRESH;
+                    } else if (frozenRadioButtonVehicle.isSelected()) {
+                        foodItemType = FoodItemType.FROZEN;
+                    }
+                    int index = vEVanList.getSelectedIndex();
+                    Van van = vanArrayList.get(index);
+                    van.setRegistrationNumber(regNum);
+                    van.setVolume(volume);
+                    van.setMaxWeight(maxWeight);
+                    van.setAverageSpeed(avgSpeed);
+                    van.setFoodItemType(foodItemType);
+                }
+            }
+        }
+    }
+
+    private class FoodItemCreate implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+
+            String label =fiCLabelText.getText();
+            double volume = Double.parseDouble(fiCVolumeText.getText());
+            double weight = Double.parseDouble(fiCWeightText.getText());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+            LocalDate expirationDate= LocalDate.parse(fiCExpirationDateText.getText(), formatter);
+            FoodItemType foodItemType=null;
+
+            if(freshRadioButton.isSelected())
+            {
+                foodItemType=FoodItemType.FRESH;
+            }
+            else if(frozenRadioButton.isSelected())
+            {
+                foodItemType=FoodItemType.FROZEN;
+            }
+
+            FoodItem foodItem=new FoodItem(label,volume,weight,expirationDate,foodItemType);
+            foodItemModel.addElement(foodItem);
+            foodItemArrayList.add(foodItem);
+
+        }
+    }
+
+    private class FoodItemEdit implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if(fiEFoodItemList.getSelectedIndex()>=0) {
+                String label = fiELabelText.getText();
+                double volume = Double.parseDouble(fiEVolumeText.getText());
+                double weight = Double.parseDouble(fiEWeightText.getText());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                LocalDate expirationDate = LocalDate.parse(fiEExperationDateText.getText(), formatter);
+                FoodItemType foodItemType = null;
+                if (fiFreshRadioButtonEdit.isSelected()) {
+                    foodItemType = FoodItemType.FRESH;
+                } else if (fiFrozenRadioButtonEdit.isSelected()) {
+                    foodItemType = FoodItemType.FROZEN;
+                }
+                int index = fiEFoodItemList.getSelectedIndex();
+                FoodItem foodItem = foodItemArrayList.get(index);
+
+                foodItem.setLabel(label);
+                foodItem.setVolume(volume);
+                foodItem.setExpirationDate(expirationDate);
+                foodItem.setFoodItemType(foodItemType);
+            }
         }
     }
 }

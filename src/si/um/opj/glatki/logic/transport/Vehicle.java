@@ -3,6 +3,8 @@ package si.um.opj.glatki.logic.transport;
 import si.um.opj.glatki.logic.FoodItem;
 import si.um.opj.glatki.logic.exceptions.CapacityExceededException;
 
+import java.util.Arrays;
+
 /**
  * Represenation of si.um.opj.glatki.logic.transport.Vehicle
  *
@@ -249,16 +251,18 @@ public abstract class Vehicle {
 
     /**
      * si.um.opj.glatki.logic.transport.Vehicle's getting information of all attributes in String
+     *
      * @return information of all attributes in String
      * @since 2020-03-18
      */
     @Override
     public String toString() {
         return "Vehicle{" +
-                "registrationNumber=" + registrationNumber +
+                "registrationNumber='" + registrationNumber + '\'' +
                 ", volume=" + volume +
                 ", maxWeight=" + maxWeight +
                 ", averageSpeed=" + averageSpeed +
+                ", cargo=" + Arrays.toString(cargo) +
                 '}';
     }
 }
