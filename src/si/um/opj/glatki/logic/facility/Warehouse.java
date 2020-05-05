@@ -46,6 +46,7 @@ public class Warehouse extends BusinessFacility implements Transportable {
         this.foodItems = new FoodItem[capacity];
     }
 
+
     /**
      * si.um.opj.glatki.logic.facility.Warehouse's si.um.opj.glatki.logic.FoodItem array getter
      * @return warehouse's si.um.opj.glatki.logic.FoodItem array

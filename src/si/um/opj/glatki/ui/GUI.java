@@ -1,9 +1,17 @@
 package si.um.opj.glatki.ui;
 
+import si.um.opj.glatki.logic.FoodItem;
+import si.um.opj.glatki.logic.facility.Location;
+import si.um.opj.glatki.logic.facility.Store;
+import si.um.opj.glatki.logic.facility.Warehouse;
+import si.um.opj.glatki.logic.transport.Truck;
+import si.um.opj.glatki.logic.transport.Van;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class GUI {
 
@@ -31,22 +39,22 @@ public class GUI {
     private JPanel fiEdit;
     private JPanel fiDelete;
     private JRadioButton warehouseRadioButton;
-    private JTextField bfCapacityTextField;
+    private JTextField bfCCapacity;
     private JRadioButton storeRadioButton;
-    private JTextField textField1;
+    private JTextField bfCCity;
     private JButton bfBCreate;
     private JLabel bfLName;
     private JPanel bfAdd;
     private JRadioButton truckRadioButton;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
-    private JTextField textField8;
+    private JTextField vCRegistrationText;
+    private JTextField vCVolumeText;
+    private JTextField vCMaxWeightText;
+    private JTextField vCAvgSpeedText;
+    private JTextField vCLengthText;
     private JButton vBCreate;
-    private JTextField numberOfTrailersTextField;
+    private JTextField vCNOTText;
     private JRadioButton vanRadioButton;
-    private JTextField textField2;
+    private JTextField bfCName;
     private JTextField textField10;
     private JTextField textField11;
     private JTextField textField12;
@@ -61,45 +69,85 @@ public class GUI {
     private JList bfWarehouseListDelete;
     private JButton bfBDelete;
     private JList bfStoreListDelete;
-    private JList vTruckListDelete;
-    private JList vVanListDelete;
+    private JList<Truck> vDTruckList;
+    private JList<Van> vDVanList;
     private JButton vBDelete;
-    private JList fiListDelete;
+    private JList<FoodItem> fiDFoodItemList;
     private JButton fiBDelete;
     private JButton fiBEdit;
-    private JList fiListEdit;
-    private JList vTruckEditList;
-    private JList vVanEditList;
+    private JList<FoodItem> fiEFoodItemList;
+    private JList<Truck> vETruckList;
+    private JList<Van> vEVanList;
     private JLabel vTruckEditListText;
     private JLabel vVanEditListText;
     private JRadioButton vTruckRadioButtonEdit;
     private JRadioButton vVanRadioButtonEdit;
     private JList bfWarehouseEditList;
-    private JList bfStoreEditList;
+    private JList<Store> bfEStoreList;
     private JLabel bfWarehouseEditListText;
     private JLabel bfStoreEditListText;
     private JRadioButton bfWarehouseRadioButtonEdit;
     private JRadioButton bfStoreRadioButtonEdit;
     private JLabel bfCapacityEditLabel;
-    private JTextField bfCapacityEditTextField;
+    private JTextField bfECapacity;
     private JButton bfBEdit;
     private JLabel bfCapacityLabel;
     private JButton bfBAdd;
     private JLabel vNumberOfTrailersEditLabel;
-    private JTextField vNumberOfTrailersEditTextLabel;
+    private JTextField vENOTText;
     private JLabel vFoodItemTypeEditText;
     private JRadioButton vFreshRadioButtonEdit;
     private JRadioButton vFrozenRadioButtonEdit;
     private JButton vBLoad;
     private JRadioButton fiFreshRadioButtonEdit;
     private JRadioButton fiFrozenRadioButtonEdit;
+    private JTextField bfCCountry;
+    private JList<Store> bfCStroeList;
+    private JList<Warehouse> bfCWarehouseList;
+    private JTextField bfECity;
+    private JTextField bfECountry;
+    private JTextField bfEName;
+    private JList<Store> bfDStoreList;
+    private JList<FoodItem> bfAFoodItemList;
+    private JList<Warehouse> bfAWarehouseList;
+    private JList<Warehouse> bfEWarehouseList;
+    private JList<Warehouse> bfDWarehouseList;
+    private JLabel bfCWarehouseText;
+    private JLabel bfCStoreText;
+    private JTextField vERegNumberText;
+    private JTextField vEVolumeText;
+    private JTextField vEMaxWeightText;
+    private JTextField vEAvgSpeedText;
+    private JTextField vELengthText;
+    private JList<FoodItem> vLFoodItemList;
+    private JList<Truck> vLTruckList;
+    private JList<Van> vLVanList;
+    private JList<Truck> vUTruckList;
+    private JList<Van> vUVanList;
+    private JList<Warehouse> vUWarehouseList;
+    private JList<Store> vUStoreList;
+    private JList<Truck> vCTruckList;
+    private JList<Van> vCVanList;
+    private JLabel vCTruckText;
+    private JLabel vCVanText;
+    private JList<FoodItem> fiCFoodItemList;
 
+    //Lists of business facilities, vehicles, and food items
+    public ArrayList<Warehouse> warehouseArrayList= new ArrayList<Warehouse>();
+    final private DefaultListModel<Warehouse> warehouseModel = new DefaultListModel<Warehouse>();
 
-    private void setButtonsVisibility(){
-        pBusinessFacilities.setVisible(false);
-        pVehicle.setVisible(false);
-        pFoodItems.setVisible(false);
-    }
+    public ArrayList<Store> storeArrayList = new ArrayList<Store>();
+    final private DefaultListModel<Store> storeModel = new DefaultListModel<Store>();
+
+    public ArrayList<Van> vanArrayList = new ArrayList<Van>();
+    final private DefaultListModel<Van> vanModel = new DefaultListModel<Van>();
+
+    public ArrayList<Truck> truckArrayList = new ArrayList<Truck>();
+    final private DefaultListModel<Truck> truckModel = new DefaultListModel<Truck>();
+
+    public ArrayList<FoodItem> foodItemArrayList = new ArrayList<FoodItem>();
+    final private DefaultListModel<FoodItem> foodItemModel = new DefaultListModel<FoodItem>();
+
 
     //this method changes visibility between number of tracks and food item type for vehicle
     private void setVehicleRadioButtonsVisibility(boolean visibility)
@@ -107,8 +155,12 @@ public class GUI {
             this.freshRadioButtonVehicle.setVisible(visibility);
             this.frozenRadioButtonVehicle.setVisible(visibility);
             this.foodItemTypeLabel.setVisible(visibility);
-            this.numberOfTrailersTextField.setVisible(!visibility);
+            this.vCNOTText.setVisible(!visibility);
             this.numberOfTrailersLabel.setVisible(!visibility);
+            this.vCTruckText.setVisible(!visibility);
+            this.vCTruckList.setVisible(!visibility);
+            this.vCVanList.setVisible(visibility);
+            this.vCVanText.setVisible(visibility);
         }
 
         private void setVehicleRadioButtonsVisibilityEdit(boolean visibility)
@@ -117,9 +169,9 @@ public class GUI {
             this.vFreshRadioButtonEdit.setVisible(visibility);
             this.vFrozenRadioButtonEdit.setVisible(visibility);
             this.vNumberOfTrailersEditLabel.setVisible(!visibility);
-            this.vNumberOfTrailersEditTextLabel.setVisible(!visibility);
-            this.vVanEditList.setVisible(visibility);
-            this.vTruckEditList.setVisible(!visibility);
+            this.vENOTText.setVisible(!visibility);
+            this.vEVanList.setVisible(visibility);
+            this.vETruckList.setVisible(!visibility);
             this.vVanEditListText.setVisible(visibility);
             this.vTruckEditListText.setVisible(!visibility);
             this.vFoodItemTypeEditText.setVisible(visibility);
@@ -127,40 +179,81 @@ public class GUI {
 
         private void setpBusinessFacilitiesRadioButtonVisibility(boolean visibility)
         {
-            this.bfStoreEditList.setVisible(visibility);
+            this.bfEStoreList.setVisible(visibility);
             this.bfStoreEditListText.setVisible(visibility);
-            this.bfWarehouseEditList.setVisible(!visibility);
+            this.bfEWarehouseList.setVisible(!visibility);
             this.bfWarehouseEditListText.setVisible(!visibility);
             this.bfCapacityEditLabel.setVisible(!visibility);
-            this.bfCapacityEditTextField.setVisible(!visibility);
+            this.bfECapacity.setVisible(!visibility);
             this.bfCapacityLabel.setVisible(!visibility);
-            this.bfCapacityTextField.setVisible(!visibility);
+            this.bfCCapacity.setVisible(!visibility);
+            this.bfCStroeList.setVisible(visibility);
+            this.bfCStoreText.setVisible(visibility);
+            this.bfCWarehouseList.setVisible(!visibility);
+            this.bfCWarehouseText.setVisible(!visibility);
+        }
 
+        private void setModelsToLists()
+        {
+            bfCWarehouseList.setModel(warehouseModel);
+            bfEWarehouseList.setModel(warehouseModel);
+            bfDWarehouseList.setModel(warehouseModel);
+            bfAWarehouseList.setModel(warehouseModel);
+
+            bfCStroeList.setModel(storeModel);
+            bfEStoreList.setModel(storeModel);
+            bfDStoreList.setModel(storeModel);
+
+            bfAFoodItemList.setModel(foodItemModel);
+
+            vCTruckList.setModel(truckModel);
+            vETruckList.setModel(truckModel);
+            vDTruckList.setModel(truckModel);
+            vLTruckList.setModel(truckModel);
+            vUTruckList.setModel(truckModel);
+
+            vCVanList.setModel(vanModel);
+            vEVanList.setModel(vanModel);
+            vDVanList.setModel(vanModel);
+            vLVanList.setModel(vanModel);
+            vUVanList.setModel(vanModel);
+
+            vLFoodItemList.setModel(foodItemModel);
+
+            vUWarehouseList.setModel(warehouseModel);
+            vUStoreList.setModel(storeModel);
+
+            fiCFoodItemList.setModel(foodItemModel);
+            fiEFoodItemList.setModel(foodItemModel);
+            fiDFoodItemList.setModel(foodItemModel);
         }
 
     public GUI() {
         setVehicleRadioButtonsVisibility(false);
         setVehicleRadioButtonsVisibilityEdit(false);
         setpBusinessFacilitiesRadioButtonVisibility(true);
+        CardLayout cardLayout = (CardLayout)(pannelsPanel.getLayout());
+        cardLayout.addLayoutComponent(pBusinessFacilities, "Business Facilities panel");
+        cardLayout.addLayoutComponent(pVehicle, "Vehicles panel");
+        cardLayout.addLayoutComponent(pFoodItems, "Food Items panel");
+        setModelsToLists();
+
         bBusinessFacilities.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                setButtonsVisibility();
-                pBusinessFacilities.setVisible(true);
+                cardLayout.show(pannelsPanel, "Business Facilities panel");
             }
         });
         bVehicle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                setButtonsVisibility();
-                pVehicle.setVisible(true);
+                cardLayout.show(pannelsPanel, "Vehicles panel");
             }
         });
         bFoodItems.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                setButtonsVisibility();
-                pFoodItems.setVisible(true);
+                cardLayout.show(pannelsPanel, "Food Items panel");
             }
         });
         warehouseRadioButton.addActionListener(new ActionListener() {
@@ -274,11 +367,19 @@ public class GUI {
                 fiFreshRadioButtonEdit.setSelected(false);
             }
         });
+
+
+        bfBCreate.addActionListener(new BusinessFacilityAdd());
+        bfBEdit.addActionListener(new BusinessFacilityEdit());
+        bfBDelete.addActionListener(new BusinessFacilityRemove());
+        bfBAdd.addActionListener(new BusinessFacilityAddFoodItem());
     }
 
+
+
     public static void main(String[] args) {
-        int height = 512;
-        int width = 768;
+        int height = 768;
+        int width = 1152;
 
 
         JFrame frame = new JFrame("Transport application");
@@ -290,5 +391,99 @@ public class GUI {
 
 
 
+    }
+
+
+    private class BusinessFacilityAdd implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            String name =bfCName.getText();
+            String city= bfCCity.getText();
+            String country= bfCCountry.getText();
+            Location location= new Location(city, country);
+
+
+            if(warehouseRadioButton.isSelected())
+            {
+                int capacity = Integer.parseInt(bfCCapacity.getText());
+
+                Warehouse warehouse = new Warehouse(name, location, capacity);
+                warehouseModel.addElement(warehouse);
+                warehouseArrayList.add(warehouse);
+            }
+
+            else if(storeRadioButton.isSelected())
+            {
+                Store store= new Store(name, location);
+                storeModel.addElement(store);
+                storeArrayList.add(store);
+            }
+        }
+    }
+
+    private class BusinessFacilityEdit implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            String name =bfEName.getText();
+            String city= bfECity.getText();
+            String country= bfECountry.getText();
+            Location location= new Location(city, country);
+            if(bfWarehouseRadioButtonEdit.isSelected())
+            {
+                if(bfEWarehouseList.getSelectedIndex()>=0)
+                {
+                    int index=bfEWarehouseList.getSelectedIndex();
+                    Warehouse warehouse = warehouseArrayList.get(index);
+
+                    warehouse.setName(name);
+                    warehouse.setLocation(location);
+                }
+            }
+
+            else if(bfStoreRadioButtonEdit.isSelected())
+            {
+                if(bfEStoreList.getSelectedIndex()>=0)
+                {
+                    int index=bfEStoreList.getSelectedIndex();
+                    Store store = storeArrayList.get(index);
+
+                    store.setName(name);
+                    store.setLocation(location);
+                }
+            }
+        }
+    }
+
+    private class BusinessFacilityRemove implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+
+                if(bfDWarehouseList.getSelectedIndex()>=0) {
+                    warehouseModel.remove(bfDWarehouseList.getSelectedIndex());
+                    warehouseArrayList.remove(bfDWarehouseList.getSelectedIndex());
+                }
+
+                if(bfDStoreList.getSelectedIndex()>=0) {
+                    storeArrayList.remove(bfDStoreList.getSelectedIndex());
+                    storeModel.remove(bfDStoreList.getSelectedIndex());
+                }
+
+        }
+    }
+
+
+    private class BusinessFacilityAddFoodItem implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            int wIndex=bfAWarehouseList.getSelectedIndex();
+            int fiIndex=bfAFoodItemList.getSelectedIndex();
+
+            Warehouse warehouse = warehouseArrayList.get(wIndex);
+            FoodItem foodItem = foodItemArrayList.get(fiIndex);
+
+            warehouse.addItem(foodItem);
+        }
     }
 }
