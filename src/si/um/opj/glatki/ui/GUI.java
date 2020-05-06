@@ -2,15 +2,11 @@ package si.um.opj.glatki.ui;
 
 import si.um.opj.glatki.logic.FoodItem;
 import si.um.opj.glatki.logic.FoodItemType;
-import si.um.opj.glatki.logic.exceptions.CapacityExceededException;
-import si.um.opj.glatki.logic.exceptions.FoodItemTypeException;
-import si.um.opj.glatki.logic.exceptions.VolumeExceededException;
 import si.um.opj.glatki.logic.facility.Location;
 import si.um.opj.glatki.logic.facility.Store;
 import si.um.opj.glatki.logic.facility.Warehouse;
 import si.um.opj.glatki.logic.transport.Truck;
 import si.um.opj.glatki.logic.transport.Van;
-import si.um.opj.glatki.logic.transport.Vehicle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -125,7 +121,7 @@ public class GUI {
     private JTextField vEVolumeText;
     private JTextField vEMaxWeightText;
     private JTextField vEAvgSpeedText;
-    private JList<FoodItem> vLFoodItemList;
+    private JList<Warehouse> vLWarehouseList;
     private JList<Truck> vLTruckList;
     private JList<Van> vLVanList;
     private JList<Truck> vUTruckList;
@@ -142,6 +138,14 @@ public class GUI {
     private JTextField fiEVolumeText;
     private JTextField fiEWeightText;
     private JTextField fiEExperationDateText;
+    private JScrollPane vCTruckSC;
+    private JScrollPane vCVanSC;
+    private JScrollPane vETruckSC;
+    private JScrollPane vEVanSC;
+    private JScrollPane bfCWarehouseSC;
+    private JScrollPane bfCStoreSC;
+    private JScrollPane bfEWarehouseSC;
+    private JScrollPane bfEStoreSC;
 
     //Lists of business facilities, vehicles, and food items
     public ArrayList<Warehouse> warehouseArrayList= new ArrayList<Warehouse>();
@@ -172,6 +176,8 @@ public class GUI {
             this.vCTruckList.setVisible(!visibility);
             this.vCVanList.setVisible(visibility);
             this.vCVanText.setVisible(visibility);
+            this.vCTruckSC.setVisible(!visibility);
+            this.vCVanSC.setVisible(visibility);
         }
 
         private void setVehicleRadioButtonsVisibilityEdit(boolean visibility)
@@ -186,9 +192,11 @@ public class GUI {
             this.vVanEditListText.setVisible(visibility);
             this.vTruckEditListText.setVisible(!visibility);
             this.vFoodItemTypeEditText.setVisible(visibility);
+            this.vETruckSC.setVisible(!visibility);
+            this.vEVanSC.setVisible(visibility);
         }
 
-        private void setpBusinessFacilitiesRadioButtonVisibility(boolean visibility)
+        private void setpBusinessFacilitiesRadioButtonVisibilityEdit(boolean visibility)
         {
             this.bfEStoreList.setVisible(visibility);
             this.bfStoreEditListText.setVisible(visibility);
@@ -196,14 +204,22 @@ public class GUI {
             this.bfWarehouseEditListText.setVisible(!visibility);
             this.bfCapacityEditLabel.setVisible(!visibility);
             this.bfECapacity.setVisible(!visibility);
-            this.bfCapacityLabel.setVisible(!visibility);
+            this.bfEWarehouseSC.setVisible(!visibility);
+            this.bfEStoreSC.setVisible(visibility);
+        }
+
+        private  void setBusisenessFacilitiesButtonsVisibilityCreate(boolean visibility)
+        {
+
             this.bfCCapacity.setVisible(!visibility);
             this.bfCStroeList.setVisible(visibility);
             this.bfCStoreText.setVisible(visibility);
             this.bfCWarehouseList.setVisible(!visibility);
             this.bfCWarehouseText.setVisible(!visibility);
+            this.bfCWarehouseSC.setVisible(!visibility);
+            this.bfCStoreSC.setVisible(visibility);
+            this.bfCapacityLabel.setVisible(!visibility);
         }
-
         private void setModelsToLists()
         {
             bfCWarehouseList.setModel(warehouseModel);
@@ -229,7 +245,7 @@ public class GUI {
             vLVanList.setModel(vanModel);
             vUVanList.setModel(vanModel);
 
-            vLFoodItemList.setModel(foodItemModel);
+            vLWarehouseList.setModel(warehouseModel);
 
             fiCFoodItemList.setModel(foodItemModel);
             fiEFoodItemList.setModel(foodItemModel);
@@ -241,7 +257,9 @@ public class GUI {
     public GUI() {
         setVehicleRadioButtonsVisibility(false);
         setVehicleRadioButtonsVisibilityEdit(false);
-        setpBusinessFacilitiesRadioButtonVisibility(true);
+        setpBusinessFacilitiesRadioButtonVisibilityEdit(true);
+        setBusisenessFacilitiesButtonsVisibilityCreate(true);
+
         CardLayout cardLayout = (CardLayout)(pannelsPanel.getLayout());
         cardLayout.addLayoutComponent(pBusinessFacilities, "Business Facilities panel");
         cardLayout.addLayoutComponent(pVehicle, "Vehicles panel");
@@ -270,14 +288,14 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 storeRadioButton.setSelected(false);
-                setpBusinessFacilitiesRadioButtonVisibility(false);
+                setBusisenessFacilitiesButtonsVisibilityCreate(false);
             }
         });
         storeRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 warehouseRadioButton.setSelected(false);
-                setpBusinessFacilitiesRadioButtonVisibility(true);
+                setBusisenessFacilitiesButtonsVisibilityCreate(true);
             }
         });
 
@@ -285,14 +303,14 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 bfStoreRadioButtonEdit.setSelected(false);
-                setpBusinessFacilitiesRadioButtonVisibility(false);
+                setpBusinessFacilitiesRadioButtonVisibilityEdit(false);
             }
         });
         bfStoreRadioButtonEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 bfWarehouseRadioButtonEdit.setSelected(false);
-                setpBusinessFacilitiesRadioButtonVisibility(true);
+                setpBusinessFacilitiesRadioButtonVisibilityEdit(true);
             }
         });
 
@@ -390,23 +408,33 @@ public class GUI {
         vBLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(vLFoodItemList.getSelectedIndex()>=0) {
-                    int fiIndex = vLFoodItemList.getSelectedIndex();
+                if(vLWarehouseList.getSelectedIndex()>=0) {
+                    int wIndex = vLWarehouseList.getSelectedIndex();
 
-                    FoodItem foodItem = foodItemArrayList.get(fiIndex);
+                    Warehouse warehouse = warehouseArrayList.get(wIndex);
 
                     if(vLVanList.getSelectedIndex()>=0)
                     {
                         int vIndex = vLVanList.getSelectedIndex();
                         Van van = vanArrayList.get(vIndex);
-                        van.loadFoodItem(foodItem);
+                        try {
+                            warehouse.acceptVehicle(van);
+                        }
+                          catch (Exception e) {
+                             e.printStackTrace();
+                        }
                     }
 
                     else if(vLTruckList.getSelectedIndex()>=0)
                     {
                         int tIndex = vLTruckList.getSelectedIndex();
                         Truck truck = truckArrayList.get(tIndex);
-                        truck.loadFoodItem(foodItem);
+                        try {
+                        warehouse.acceptVehicle(truck);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     }
                 }
 

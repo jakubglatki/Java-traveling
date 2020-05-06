@@ -30,8 +30,8 @@ public class BusinessFacilityDelete implements ActionListener {
             DefaultListModel<Store> storeModel = (DefaultListModel<Store>) storeJList.getModel();
 
             if(warehouseJList.getSelectedIndex()>=0) {
-                warehouseModel.remove(warehouseJList.getSelectedIndex());
                 warehouseArrayList.remove(warehouseJList.getSelectedIndex());
+                warehouseModel.remove(warehouseJList.getSelectedIndex());
             }
 
             if(storeJList.getSelectedIndex()>=0) {
