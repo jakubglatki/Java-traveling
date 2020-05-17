@@ -3,6 +3,8 @@ package si.um.opj.glatki.logic.facility;
 import si.um.opj.glatki.logic.transport.Transportable;
 import si.um.opj.glatki.logic.transport.Vehicle;
 
+import java.io.Serializable;
+
 /**
  * Represenation of store
  *
@@ -11,7 +13,7 @@ import si.um.opj.glatki.logic.transport.Vehicle;
  */
 
 
-public class Store extends BusinessFacility implements Transportable {
+public class Store extends BusinessFacility implements Transportable, Serializable {
 
 
     //Constructors

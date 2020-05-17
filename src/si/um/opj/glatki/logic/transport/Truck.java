@@ -1,6 +1,8 @@
 package si.um.opj.glatki.logic.transport;
 
-public class Truck extends Vehicle {
+import java.io.Serializable;
+
+public class Truck extends Vehicle implements Serializable {
 
     private int numberOfTrailers;
 

@@ -1,5 +1,7 @@
 package si.um.opj.glatki.logic.facility;
 
+import java.io.Serializable;
+
 /**
  * Represenation of si.um.opj.glatki.logic.facility.Location
  *
@@ -7,7 +9,7 @@ package si.um.opj.glatki.logic.facility;
  * @since   2020-03-18
  */
 
-public class Location {
+public class Location implements Serializable {
     private String city;
     private String country;
 

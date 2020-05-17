@@ -3,6 +3,7 @@ package si.um.opj.glatki.logic.transport;
 import si.um.opj.glatki.logic.FoodItem;
 import si.um.opj.glatki.logic.exceptions.CapacityExceededException;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Arrays;
  * @since   2020-03-18
  */
 
-public abstract class Vehicle {
+public abstract class Vehicle implements Serializable {
     protected String registrationNumber;
     protected double volume;
     protected double maxWeight;

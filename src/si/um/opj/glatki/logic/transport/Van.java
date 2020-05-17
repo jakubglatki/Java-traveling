@@ -2,7 +2,9 @@ package si.um.opj.glatki.logic.transport;
 
 import si.um.opj.glatki.logic.FoodItemType;
 
-public class Van extends Vehicle {
+import java.io.Serializable;
+
+public class Van extends Vehicle implements Serializable {
 
     private FoodItemType foodItemType;
 

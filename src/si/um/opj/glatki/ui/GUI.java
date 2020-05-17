@@ -2,6 +2,8 @@ package si.um.opj.glatki.ui;
 
 import si.um.opj.glatki.logic.FoodItem;
 import si.um.opj.glatki.logic.FoodItemType;
+import si.um.opj.glatki.logic.Serialization;
+import si.um.opj.glatki.logic.StoreEvents;
 import si.um.opj.glatki.logic.facility.Location;
 import si.um.opj.glatki.logic.facility.Store;
 import si.um.opj.glatki.logic.facility.Warehouse;
@@ -146,6 +148,10 @@ public class GUI {
     private JScrollPane bfCStoreSC;
     private JScrollPane bfEWarehouseSC;
     private JScrollPane bfEStoreSC;
+    private JButton serializeDataButton;
+    private static Serialization serializer;
+    private static StoreEvents events;
+
 
     //Lists of business facilities, vehicles, and food items
     public ArrayList<Warehouse> warehouseArrayList= new ArrayList<Warehouse>();
@@ -163,6 +169,36 @@ public class GUI {
     public ArrayList<FoodItem> foodItemArrayList = new ArrayList<FoodItem>();
     final private DefaultListModel<FoodItem> foodItemModel = new DefaultListModel<FoodItem>();
 
+
+    private void setSerializationData()
+    {
+        serializer = new Serialization(warehouseArrayList,storeArrayList,vanArrayList,truckArrayList,foodItemArrayList);
+        serializer.deserialize();
+
+        warehouseArrayList = serializer.getWarehouseArray();
+        storeArrayList = serializer.getStoreArray();
+        vanArrayList = serializer.getVanArray();
+        truckArrayList = serializer.getTruckArray();
+        foodItemArrayList = serializer.getFoodItemArray();
+
+
+        for (Warehouse warehouse: warehouseArrayList) {
+            warehouseModel.addElement(warehouse);
+        }
+        for (Store store: storeArrayList) {
+            storeModel.addElement(store);
+        }
+        for (Van van: vanArrayList) {
+            vanModel.addElement(van);
+        }
+        for (Truck truck: truckArrayList) {
+            truckModel.addElement(truck);
+        }
+        for (FoodItem foodItem: foodItemArrayList) {
+            foodItemModel.addElement(foodItem);
+        }
+
+    }
 
     //this method changes visibility between number of tracks and food item type for vehicle
     private void setVehicleRadioButtonsVisibility(boolean visibility)
@@ -255,6 +291,7 @@ public class GUI {
 
 
     public GUI() {
+
         setVehicleRadioButtonsVisibility(false);
         setVehicleRadioButtonsVisibilityEdit(false);
         setpBusinessFacilitiesRadioButtonVisibilityEdit(true);
@@ -264,7 +301,10 @@ public class GUI {
         cardLayout.addLayoutComponent(pBusinessFacilities, "Business Facilities panel");
         cardLayout.addLayoutComponent(pVehicle, "Vehicles panel");
         cardLayout.addLayoutComponent(pFoodItems, "Food Items panel");
+        setSerializationData();
         setModelsToLists();
+
+        events=new StoreEvents();
 
         bBusinessFacilities.addActionListener(new ActionListener() {
             @Override
@@ -419,9 +459,11 @@ public class GUI {
                         Van van = vanArrayList.get(vIndex);
                         try {
                             warehouse.acceptVehicle(van);
+                            events.addInfo("Van was accepted");
                         }
                           catch (Exception e) {
                              e.printStackTrace();
+                             events.addInfo(e);
                         }
                     }
 
@@ -431,9 +473,11 @@ public class GUI {
                         Truck truck = truckArrayList.get(tIndex);
                         try {
                         warehouse.acceptVehicle(truck);
+                        events.addInfo("Truck was accepted");
                     }
                     catch (Exception e) {
                         e.printStackTrace();
+                        events.addInfo(e);
                     }
                     }
                 }
@@ -449,12 +493,14 @@ public class GUI {
                         int vIndex = vUVanList.getSelectedIndex();
                         Van van = vanArrayList.get(vIndex);
                        van.unloadFoodItems();
+                       events.addInfo("Van was unloaded");
                     }
 
                     else if(vUTruckList.getSelectedIndex()>=0) {
                         int tIndex = vUTruckList.getSelectedIndex();
                         Truck truck = truckArrayList.get(tIndex);
                         truck.unloadFoodItems();
+                        events.addInfo("Truck was unloaded");
                     }
 
 
@@ -466,7 +512,12 @@ public class GUI {
         fiBDelete.addActionListener(new FoodItemDelete(foodItemArrayList, fiDFoodItemList));
 
 
-
+        serializeDataButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                serializer.serialize();
+            }
+        });
     }
 
 
@@ -483,6 +534,7 @@ public class GUI {
         frame.pack();
         frame.setVisible(true);
 
+        serializer.serialize();
 
 
     }
@@ -505,6 +557,7 @@ public class GUI {
                 Warehouse warehouse = new Warehouse(name, location, capacity);
                 warehouseModel.addElement(warehouse);
                 warehouseArrayList.add(warehouse);
+                events.addInfo("Warehouse added");
             }
 
             else if(storeRadioButton.isSelected())
@@ -512,6 +565,7 @@ public class GUI {
                 Store store= new Store(name, location);
                 storeModel.addElement(store);
                 storeArrayList.add(store);
+                events.addInfo("Store added");
             }
         }
     }
@@ -532,6 +586,7 @@ public class GUI {
 
                     warehouse.setName(name);
                     warehouse.setLocation(location);
+                    events.addInfo("Warehouse updated");
                 }
             }
 
@@ -544,6 +599,7 @@ public class GUI {
 
                     store.setName(name);
                     store.setLocation(location);
+                    events.addInfo("Store updated");
                 }
             }
         }
@@ -564,6 +620,8 @@ public class GUI {
                 FoodItem foodItem = foodItemArrayList.get(fiIndex);
 
                 warehouse.addItem(foodItem);
+
+                events.addInfo("Food item added to warehouse");
             }
         }
     }
@@ -586,6 +644,8 @@ public class GUI {
 
                 truckModel.addElement(truck);
                 truckArrayList.add(truck);
+
+                events.addInfo("Truck created");
              }
 
 
@@ -603,6 +663,8 @@ public class GUI {
                 Van van= new Van(regNum, volume, maxWeight, avgSpeed, length, foodItemType);
                 vanModel.addElement(van);
                 vanArrayList.add(van);
+
+                events.addInfo("Van created");
             }
         }
     }
@@ -629,6 +691,8 @@ public class GUI {
                 truck.setMaxWeight(maxWeight);
                 truck.setAverageSpeed(avgSpeed);
                 truck.setNumberOfTrailers(numbOfTrailers);
+
+                    events.addInfo("Truck updated");
             }
         }
             else if(vVanRadioButtonEdit.isSelected())
@@ -647,6 +711,8 @@ public class GUI {
                     van.setMaxWeight(maxWeight);
                     van.setAverageSpeed(avgSpeed);
                     van.setFoodItemType(foodItemType);
+
+                    events.addInfo("Van updated");
                 }
             }
         }
@@ -676,6 +742,8 @@ public class GUI {
             foodItemModel.addElement(foodItem);
             foodItemArrayList.add(foodItem);
 
+
+            events.addInfo("Food Item created");
         }
     }
 
@@ -701,6 +769,8 @@ public class GUI {
                 foodItem.setVolume(volume);
                 foodItem.setExpirationDate(expirationDate);
                 foodItem.setFoodItemType(foodItemType);
+
+                events.addInfo("Food Item updated");
             }
         }
     }

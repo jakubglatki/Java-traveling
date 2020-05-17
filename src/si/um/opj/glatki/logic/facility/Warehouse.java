@@ -9,13 +9,15 @@ import si.um.opj.glatki.logic.transport.Truck;
 import si.um.opj.glatki.logic.transport.Van;
 import si.um.opj.glatki.logic.transport.Vehicle;
 
+import java.io.Serializable;
+
 /**
  * Represenation of warehouse
  *
  * @author  Jakub Glatki
  * @since   2020-03-18
  */
-public class Warehouse extends BusinessFacility implements Transportable {
+public class Warehouse extends BusinessFacility implements Transportable, Serializable {
 
     private FoodItem[] foodItems;
 

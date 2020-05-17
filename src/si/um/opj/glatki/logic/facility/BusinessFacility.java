@@ -1,6 +1,8 @@
 package si.um.opj.glatki.logic.facility;
 
-public abstract class BusinessFacility {
+import java.io.Serializable;
+
+public abstract class BusinessFacility implements Serializable {
 
     protected String name;
     protected Location location;

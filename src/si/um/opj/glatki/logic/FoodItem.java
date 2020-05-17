@@ -1,5 +1,7 @@
 package si.um.opj.glatki.logic;
 
+import java.io.Serializable;
+
 /**
  * Represenation of Food Item
  *
@@ -7,7 +9,7 @@ package si.um.opj.glatki.logic;
  * @since   2020-03-18
  */
 
-public class FoodItem {
+public class FoodItem implements Serializable {
     private String label;
     private double volume;
     private double weight;
