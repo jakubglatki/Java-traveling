@@ -3,3 +3,5 @@ Application with visual interface that allows user to make food-transport system
 Data for each facility is saved in XML file.
 
 
+![image](https://user-images.githubusercontent.com/32642333/83327547-f51a3000-a27c-11ea-850a-2f83a9b1f906.png)
+
