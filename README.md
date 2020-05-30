@@ -5,3 +5,4 @@ Data for each facility is saved in XML file.
 
 ![image](https://user-images.githubusercontent.com/32642333/83327547-f51a3000-a27c-11ea-850a-2f83a9b1f906.png)
 
+![image](https://user-images.githubusercontent.com/32642333/83327612-7245a500-a27d-11ea-9d96-ed4af615ebdd.png)
